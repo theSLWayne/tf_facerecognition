@@ -22,3 +22,17 @@ def init_args():
             help = 'Enter the partition that should be used to create the validation set', default = 0.2)
 
     return parser.parse_args()
+
+def validate_args(args):
+    """
+    
+    Validates arguments provided by the user while initiating the script
+
+    :param args: Parsed arguments
+    :return:    
+    """
+
+    assert os.path.isdir(args.dataset_path), 'Invalid Argument: -p / --dataset_path should be a valid folder path'
+    assert args.mode.lower() in ['train', 'test'], 'Invalid Argument: -m / --mode should be either train or testt'
+    assert args.validation_portion >= 0.0 and args.validation < 1.0, 'Invalid Argument: -v / --validation_portion should be a float between 1 and 0.'
+
