@@ -22,7 +22,9 @@ def init_args():
     parser.add_argument('-p', '--dataset_path', type = str, 
             help = 'Path to the image dataset', required = True)
     parser.add_argument('-m', '--mode', type = str, 
-            help = 'Mode: Whether to create tfrecords for Train or Test set.', default = 'Train')
+            help = 'Mode: Whether to create tfrecords for Train or Test set', default = 'Train')
+    parser.add_argument('-o', '--output_path', type = str,
+            help = 'Path to the directory where tfrecord files will be saved to', required = True)
 
     return parser.parse_args()
 
@@ -75,6 +77,7 @@ def write_tfrecords(dataset, save_path, mode):
     for batch in tqdm(dataset):
         for image, label in zip(batch[0], batch[1]):
             pass
+            # TODO: Write tfrecord files
 
 
 # main function
@@ -92,6 +95,9 @@ if __name__ == '__main__':
 
     # Load dataset from folder
     dataset = load_data(args.dataset_path)
+    print(dataset.file_paths)
+    
+    # TODO: Function to save label categories as pkl file
 
     # Write dataset to tfrecord files
     saved_file_path = write_tfrecords(dataset, "", args.mode)
