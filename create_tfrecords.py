@@ -6,6 +6,7 @@ import os
 import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 batch_size = 32
 img_size = (180, 180)
@@ -24,7 +25,7 @@ def init_args():
     parser.add_argument('-m', '--mode', type = str, 
             help = 'Mode: Whether to create tfrecords for Train or Test set', default = 'Train')
     parser.add_argument('-o', '--output_path', type = str,
-            help = 'Path to the directory where tfrecord files will be saved to', required = True)
+            help = 'Path to the directory where tfrecord files will be saved to', required = False)
 
     return parser.parse_args()
 
@@ -52,10 +53,36 @@ def load_data(dataset_path):
     ds = tf.keras.preprocessing.image_dataset_from_directory(
         dataset_path,
         image_size = img_size,
-        batch_size = batch_size
+        batch_size = batch_size,
+        seed = 123,
+        labels = "inferred"
     )
 
     return ds
+
+def _bytes_feature(value):
+  """Returns a bytes_list from a string / byte."""
+  if isinstance(value, type(tf.constant(0))):
+    value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+  return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
+def _float_feature(value):
+  """Returns a float_list from a float / double."""
+  return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+
+def serialize_example(image, label):
+    '''
+    
+    
+    '''
+
+    feature = {
+        'image': _bytes_feature(image),
+        'label': _bytes_feature(label)
+    }
+
+    example_proto = tf.train.Example(features = tf.train.Features(feature = feature))
+    return example_proto.SerializeToString()
 
 def write_tfrecords(dataset, save_path, mode):
     '''
@@ -74,10 +101,14 @@ def write_tfrecords(dataset, save_path, mode):
     # Classes list
     class_list = dataset.class_names
 
-    for batch in tqdm(dataset):
-        for image, label in zip(batch[0], batch[1]):
-            pass
-            # TODO: Write tfrecord files
+    with tf.io.TFRecordWriter(tfrecords_file_path) as writer:
+        for image_batch, label_batch in tqdm(dataset):
+            for image, label in zip(image_batch, label_batch):
+                example = serialize_example(image, class_list[label])
+                writer.writer(example)
+
+    print('TFRecords file written to: {}'.format(tfrecords_file_path))
+            
 
 
 # main function
@@ -95,9 +126,8 @@ if __name__ == '__main__':
 
     # Load dataset from folder
     dataset = load_data(args.dataset_path)
-    print(dataset.file_paths)
     
     # TODO: Function to save label categories as pkl file
 
     # Write dataset to tfrecord files
-    saved_file_path = write_tfrecords(dataset, "", args.mode)
+    saved_file_path = write_tfrecords(dataset, ".\\", args.mode)
