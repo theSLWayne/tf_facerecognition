@@ -2,11 +2,10 @@
 
 import argparse
 import os
+import pickle
 
 import tensorflow as tf
-import numpy as np
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 batch_size = 32
 img_size = (180, 180)
@@ -60,6 +59,15 @@ def load_data(dataset_path):
 
     return ds
 
+def dump_labels(labels):
+    '''
+    
+    
+    '''
+
+    with open('classes.pkl', 'wb') as f:
+        pickle.dump(labels, f)
+
 def _bytes_feature(value):
   """Returns a bytes_list from a string / byte."""
   if isinstance(value, type(tf.constant(0))):
@@ -77,7 +85,7 @@ def serialize_example(image, label):
     '''
 
     feature = {
-        'image': _bytes_feature(image.tostring()),
+        'image': _bytes_feature(image.tobytes()),
         'label': _int64_feature(label)
     }
 
@@ -98,16 +106,13 @@ def write_tfrecords(dataset, save_path, mode):
     # Create filepath for the tfrecords file
     tfrecords_file_path = os.path.join(save_path, "{}.tfrecords".format(mode.lower()))
 
-    # Classes list
-    class_list = dataset.class_names
-
     with tf.io.TFRecordWriter(tfrecords_file_path) as writer:
         for image_batch, label_batch in tqdm(dataset):
             for image, label in zip(image_batch, label_batch):
                 example = serialize_example(image.numpy(), label)
                 writer.write(example)
 
-    print('TFRecords file written to: {}'.format(tfrecords_file_path))
+    return tfrecords_file_path
             
 
 
@@ -127,7 +132,8 @@ if __name__ == '__main__':
     # Load dataset from folder
     dataset = load_data(args.dataset_path)
     
-    # TODO: Function to save label categories as pkl file
+    # Save label classes to pickle file
+    dump_labels(dataset.class_names)
 
     # Write dataset to tfrecord files
     saved_file_path = write_tfrecords(dataset, ".\\", args.mode)
