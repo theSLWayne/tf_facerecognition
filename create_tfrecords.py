@@ -66,9 +66,9 @@ def _bytes_feature(value):
     value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
   return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
-def _float_feature(value):
-  """Returns a float_list from a float / double."""
-  return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+def _int64_feature(value):
+  """Returns an int64_list from a bool / enum / int / uint."""
+  return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 def serialize_example(image, label):
     '''
@@ -77,8 +77,8 @@ def serialize_example(image, label):
     '''
 
     feature = {
-        'image': _bytes_feature(image),
-        'label': _bytes_feature(label)
+        'image': _bytes_feature(image.tostring()),
+        'label': _int64_feature(label)
     }
 
     example_proto = tf.train.Example(features = tf.train.Features(feature = feature))
@@ -104,8 +104,8 @@ def write_tfrecords(dataset, save_path, mode):
     with tf.io.TFRecordWriter(tfrecords_file_path) as writer:
         for image_batch, label_batch in tqdm(dataset):
             for image, label in zip(image_batch, label_batch):
-                example = serialize_example(image, class_list[label])
-                writer.writer(example)
+                example = serialize_example(image.numpy(), label)
+                writer.write(example)
 
     print('TFRecords file written to: {}'.format(tfrecords_file_path))
             
