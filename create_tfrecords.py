@@ -6,6 +6,7 @@ import pickle
 
 import tensorflow as tf
 from tqdm import tqdm
+import glog
 
 batch_size = 32
 img_size = (180, 180)
@@ -38,6 +39,7 @@ def validate_args(args):
     """
 
     assert os.path.isdir(args.dataset_path), 'Invalid Argument: -p / --dataset_path should be a valid folder path'
+    assert os.path.isdir(args.output_path), 'Invalid Argument: -o / --output_path should be a valid folder path'
     assert args.mode.lower() in ['train', 'test'], 'Invalid Argument: -m / --mode should be either train or test'
 
 def load_data(dataset_path):
@@ -164,6 +166,6 @@ if __name__ == '__main__':
     dump_labels(dataset.class_names)
 
     # Write dataset to tfrecord files
-    saved_file_path = write_tfrecords(dataset, ".\\", args.mode)
+    saved_file_path = write_tfrecords(dataset, args.output_path, args.mode)
 
-    print('Tfrecord writing successful.\nFile saved to {}'.format(saved_file_path))
+    glog.info('Tfrecord writing successful. File saved to {}'.format(saved_file_path))
