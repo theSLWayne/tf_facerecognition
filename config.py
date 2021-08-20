@@ -4,7 +4,11 @@ configs = {
     'architecture': {
         'image_height': 180,
         'image_width': 180,
-        'batch_size': 32
+        'image_layers': 3, #RGB 
+    },
+    'model': {
+        'hidden_layers': 1,
+        'droupot_rate': 0.2
     },
     'train': {
         'batch_size': 32,
