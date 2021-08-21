@@ -1,8 +1,11 @@
 '''The tensorflow model used for facial recognition'''
 
 import tensorflow as tf
+from config import config
 
-img_shape = (180, 180, 3)
+configs = config
+
+img_shape = (configs.architecture.image_height, configs.architecture.image_width, configs.architecture.input_channels)
 
 class FacialRecog_Model():
     def __init__(self, num_classes):
@@ -35,3 +38,5 @@ class FacialRecog_Model():
                     metrics = ['accuracy'])
 
         return model
+
+        # TODO: Look into extending tf.Model and give the user to define number of layers, dropouts etc.
