@@ -1,9 +1,7 @@
 '''The tensorflow model used for facial recognition'''
 
 import tensorflow as tf
-from config import config
-
-configs = config
+from config import config as configs
 
 img_shape = (configs.architecture.image_height, configs.architecture.image_width, configs.architecture.input_channels)
 
