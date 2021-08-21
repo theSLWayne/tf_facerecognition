@@ -38,7 +38,7 @@ class FacialRecog_Model():
         # Compile the model
         model.compile(optimizer = tf.keras.optimizers.Adam(),
                     loss = tf.keras.losses.CategoricalCrossentropy(),
-                    metrics = ['accuracy'])
+                    metrics = ['accuracy', 'loss'])
 
         return model
 
