@@ -11,7 +11,17 @@ import tensorflow as tf
 
 import argparse
 import os
-from config import config as configs
+from config import config
+
+callbacks = [
+    # Save weights of the model at each epoch, if validation loss improves
+    tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/',
+            save_weights_only = True, monitor = 'val_accuracy', mode = 'max', save_best_only = True),
+    # Stop training when the monitored metric has stopped improving
+    tf.keras.callbacks.EarlyStopping(monitor = 'val_accuracy', patience = config.train.patience_epochs),
+    # Write training details to enable visualizations with tensorboard
+    tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard')
+]
 
 def init_args():
     """
@@ -43,7 +53,8 @@ def validate_args(args):
 
 def train_model():
     pass
-    
+    # TODO: Add training code here
+
 if __name__ == '__main__':
     """
     
