@@ -34,6 +34,8 @@ config.train.batch_size = 32
 config.train.epochs = 100
 # Learning rate
 config.train.learning_rate = 0.001
+# Early stopping patience epochs
+config.train.patience_epochs = 3
 
 # Test configurations
 config.test = easydict()
