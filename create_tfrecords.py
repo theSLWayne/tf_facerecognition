@@ -1,3 +1,8 @@
+# @Date     : 21/08/2021
+# @Author   :theSLWayne
+# @File     :create_tfrecords.py
+# @IDE      :Visual Studio Code
+
 """Creates tfrecords for train and test sets for the facial recognition model"""
 
 import argparse

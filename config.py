@@ -2,6 +2,7 @@
 # @Author   :theSLWayne
 # @File     :config.py
 # @IDE      :Visual Studio Code
+
 '''
 Contains configurations used for I/O, tfrecord creation, training and evaluating the facial recognition model
 '''

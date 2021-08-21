@@ -1,3 +1,8 @@
+# @Date     : 21/08/2021
+# @Author   :theSLWayne
+# @File     :train.py
+# @IDE      :Visual Studio Code
+
 '''The tensorflow model used for facial recognition'''
 
 import tensorflow as tf
