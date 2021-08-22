@@ -2,3 +2,5 @@ test/
 __pycache__
 *.tfrecords
 *.pkl
+checkpoints
+saved_models
