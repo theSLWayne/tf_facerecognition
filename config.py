@@ -36,6 +36,8 @@ config.train.epochs = 100
 config.train.learning_rate = 0.001
 # Early stopping patience epochs
 config.train.patience_epochs = 3
+# Validation split
+config.train.validation_split = 0.2
 
 # Test configurations
 config.test = easydict()
