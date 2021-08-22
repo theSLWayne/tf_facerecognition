@@ -1,3 +1,8 @@
+# @Date     : 21/08/2021
+# @Author   :theSLWayne
+# @File     :create_tfrecords.py
+# @IDE      :Visual Studio Code
+
 """Creates tfrecords for train and test sets for the facial recognition model"""
 
 import argparse
@@ -8,8 +13,8 @@ import tensorflow as tf
 from tqdm import tqdm
 import glog
 
-batch_size = 32
-img_size = (180, 180)
+from config import config
+
 
 def init_args():
     """
@@ -32,7 +37,7 @@ def init_args():
 def validate_args(args):
     """
     
-    Validates arguments provided by the user while initiating the script
+    Validates arguments provided by the user while running the script
 
     :param args: Parsed arguments
     :return:    
@@ -54,8 +59,8 @@ def load_data(dataset_path):
     # Load data using keras preprocessing api
     ds = tf.keras.preprocessing.image_dataset_from_directory(
         dataset_path,
-        image_size = img_size,
-        batch_size = batch_size,
+        image_size = (config.architecture.image_height, config.architecture.image_width),
+        batch_size = config.train.batch_size,
         seed = 123,
         labels = "inferred"
     )
