@@ -31,3 +31,17 @@ def init_args():
     parser.add_argument('-e', '--epochs', type=int, help='Number of epochs to train', default=None)
 
     return parser.parse_args()
+
+def validate_args(args):
+    """
+    
+    Validates arguments provided by the user while running the script
+
+    :param args: Parsed arguments
+    :return:    
+    """
+
+    assert os.path.isdir(args.dataset_path), 'Invalid Argument: -p / --dataset_path should be a valid folder path'
+    assert os.path.exists(args.model_save_path), 'Invalid Argument: -m / --model_save_path should be a valid path to an existing directory'
+
+
