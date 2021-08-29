@@ -44,4 +44,37 @@ def validate_args(args):
     assert os.path.isdir(args.dataset_path), 'Invalid Argument: -p / --dataset_path should be a valid folder path'
     assert os.path.exists(args.model_save_path), 'Invalid Argument: -m / --model_save_path should be a valid path to an existing directory'
 
+def load_data(dataset_path):
+    '''
+    
+    Loads train/test dataset from a directory and creates tensorflow datasets.
 
+    :param dataset_path: Path to the directory containing training/test data
+    :return: Train/test dataset as tf.data.Dataset object
+    '''
+
+    # Load data using keras preprocessing api
+    ds = tf.keras.preprocessing.image_dataset_from_directory(
+        dataset_path,
+        image_size = (config.architecture.image_height, config.architecture.image_width),
+        batch_size = config.train.batch_size,
+        seed = 123,
+    )
+
+    return ds
+
+if __name__ == '__main__':
+    """
+    Run script
+    """
+
+    # Initialize arguments
+    args = init_args()
+
+    # Argument validation
+    validate_args(args)
+
+    # Load dataset from directory
+    dataset = load_data(args.dataset_path)
+
+    
