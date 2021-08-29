@@ -15,6 +15,7 @@ import os
 import pickle
 
 from config import config
+from model import FacialRecog_Model
 
 def init_args():
     """
@@ -63,6 +64,61 @@ def load_data(dataset_path):
 
     return ds
 
+def dump_labels(labels):
+    '''
+    
+    Saves label classes of the loaded dataset into a .pkl file
+
+    :param labels: List of label classes
+    :return:
+    '''
+
+    with open('classes.pkl', 'wb') as f:
+        pickle.dump(labels, f)
+
+def train_model(dataset, model_save_path, epochs, num_classes):
+    """
+    
+    Trains the facial recognition model
+
+    :param dataset: Dataset to be used in training
+    :param model_save_path: Path to save the model
+    :param epochs: Number of epochs training should go on
+    :param num_classes: Number of distinct classes of data in the training dataset
+    :return:
+    """
+
+    # Callbacks
+    callbacks = [
+        # Save weights of the model at each epoch, if validation loss improves
+        tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/facial_recog.ckpt',
+                save_weights_only = True, monitor = 'val_accuracy', mode = 'max', save_best_only = True),
+        # Stop training when the monitored metric has stopped improving
+        tf.keras.callbacks.EarlyStopping(monitor = 'val_accuracy', patience = config.train.patience_epochs),
+        # Write training details to enable visualizations with tensorboard
+        tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard')
+    ]
+
+    # Create Model
+    model_class = FacialRecog_Model(num_classes=num_classes)
+    model = model_class.create_model()
+
+    # Epochs
+    epochs = epochs if epochs else config.train.epochs
+
+    # Train function
+    history = model.fit(
+        dataset,
+        batch_size = 32,
+        epochs = epochs,
+        validation_split = config.train.validation_split,
+        verbose = 1,
+        callbacks = callbacks
+    )
+
+    # Save model
+    model.save('{}/facial_recog_model'.format(model_save_path))
+
 if __name__ == '__main__':
     """
     Run script
@@ -77,4 +133,16 @@ if __name__ == '__main__':
     # Load dataset from directory
     dataset = load_data(args.dataset_path)
 
-    
+    # Get labels list
+    labels = dataset.class_names
+
+    # Save labels to a pickle file
+    dump_labels(labels)
+
+    # Train the model
+    train_model(
+        dataset=dataset, 
+        model_save_path=args.model_save_path,
+        epochs=args.epochs,
+        num_classes=len(labels)
+    )
