@@ -29,3 +29,5 @@ def init_args():
     parser.add_argument('-m', '--model_save_path', type = str,
             help = 'Path of the directory where trained model should be saved to', required=True)
     parser.add_argument('-e', '--epochs', type=int, help='Number of epochs to train', default=None)
+
+    return parser.parse_args()
