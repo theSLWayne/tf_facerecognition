@@ -26,25 +26,20 @@ class FacialRecog_Model():
         # Making base model untrainable, since imagenet weights are used
         base_model.trainable = False
 
-        # Image preprocessing layer
-        preprocess_images = tf.keras.applications.mobilenet_v2.preprocess_input
-
-        # Image rescaling layer
-        rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset = -1)
-
         # Create the model
-        model = tf.keras.Sequential([
-            base_model,
-            tf.keras.layers.Conv2D(32, 3, activation='relu'),
-            tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.GlobalAveragePooling2D(),
-            tf.keras.layers.Dense(self.num_classes, activation = 'softmax')
-        ])
+        inputs = tf.keras.Input(shape=(configs.architecture.image_height, configs.architecture.image_width, configs.architecture.input_channels))
+        x = tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
+        x = base_model(x, training=False)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.Dropout(0.2)(x)
+        outputs = tf.keras.layers.Dense(self.num_classes)(x)
+
+        model = tf.keras.Model(inputs, outputs)
 
         # Compile the model
         model.compile(optimizer = tf.keras.optimizers.Adam(),
-                    loss = tf.keras.losses.CategoricalCrossentropy(),
-                    metrics = ['accuracy', 'loss'])
+                    loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                    metrics = ['accuracy'])
 
         return model
 
