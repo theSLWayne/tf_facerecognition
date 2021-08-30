@@ -54,15 +54,27 @@ def load_data(dataset_path):
     :return: Train/test dataset as tf.data.Dataset object
     '''
 
-    # Load data using keras preprocessing api
-    ds = tf.keras.preprocessing.image_dataset_from_directory(
+    # Load training data using keras preprocessing api
+    train_ds = tf.keras.preprocessing.image_dataset_from_directory(
         dataset_path,
+        validation_split = config.train.validation_split,
+        subset = 'training',
         image_size = (config.architecture.image_height, config.architecture.image_width),
         batch_size = config.train.batch_size,
         seed = 123,
     )
 
-    return ds
+    # Load validation data
+    val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        dataset_path,
+        validation_split = config.train.validation_split,
+        subset = 'validation',
+        image_size = (config.architecture.image_height, config.architecture.image_width),
+        batch_size = config.train.batch_size,
+        seed = 123,
+    )
+
+    return train_ds, val_ds
 
 def dump_labels(labels):
     '''
@@ -76,12 +88,13 @@ def dump_labels(labels):
     with open('classes.pkl', 'wb') as f:
         pickle.dump(labels, f)
 
-def train_model(dataset, model_save_path, epochs, num_classes):
+def train_model(dataset, validation_dataset, model_save_path, epochs, num_classes):
     """
     
     Trains the facial recognition model
 
     :param dataset: Dataset to be used in training
+    :param validation_dataset: Validation dataset
     :param model_save_path: Path to save the model
     :param epochs: Number of epochs training should go on
     :param num_classes: Number of distinct classes of data in the training dataset
@@ -110,8 +123,7 @@ def train_model(dataset, model_save_path, epochs, num_classes):
     history = model.fit(
         dataset,
         batch_size = 32,
-        epochs = epochs,
-        validation_split = config.train.validation_split,
+        epochs = epochs, 
         verbose = 1,
         callbacks = callbacks
     )
@@ -131,17 +143,18 @@ if __name__ == '__main__':
     validate_args(args)
 
     # Load dataset from directory
-    dataset = load_data(args.dataset_path)
+    train_dataset, val_dataset = load_data(args.dataset_path)
 
     # Get labels list
-    labels = dataset.class_names
+    labels = train_dataset.class_names
 
     # Save labels to a pickle file
     dump_labels(labels)
 
     # Train the model
     train_model(
-        dataset=dataset, 
+        dataset=train_dataset,
+        validation_dataset=val_dataset,
         model_save_path=args.model_save_path,
         epochs=args.epochs,
         num_classes=len(labels)
