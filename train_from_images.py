@@ -51,7 +51,7 @@ def load_data(dataset_path):
     Loads train/test dataset from a directory and creates tensorflow datasets.
 
     :param dataset_path: Path to the directory containing training/test data
-    :return: Train/test dataset as tf.data.Dataset object
+    :return: Train and validation datasets as tf.data.Dataset objects, label classes list
     '''
 
     # Load training data using keras preprocessing api
@@ -74,7 +74,14 @@ def load_data(dataset_path):
         seed = 123,
     )
 
-    return train_ds, val_ds
+    class_names = train_ds.class_names
+
+    # Buffered prefetching to load images without I/O bottleneck
+    AUTOTUNE = tf.data.AUTOTUNE
+    train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
+    val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
+    
+    return train_ds, val_ds, class_names
 
 def dump_labels(labels):
     '''
@@ -143,10 +150,7 @@ if __name__ == '__main__':
     validate_args(args)
 
     # Load dataset from directory
-    train_dataset, val_dataset = load_data(args.dataset_path)
-
-    # Get labels list
-    labels = train_dataset.class_names
+    train_dataset, val_dataset, labels = load_data(args.dataset_path)
 
     # Save labels to a pickle file
     dump_labels(labels)
