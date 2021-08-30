@@ -26,6 +26,12 @@ class FacialRecog_Model():
         # Making base model untrainable, since imagenet weights are used
         base_model.trainable = False
 
+        # Image preprocessing layer
+        preprocess_images = tf.keras.applications.mobilenet_v2.preprocess_input
+
+        # Image rescaling layer
+        rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset = -1)
+
         # Create the model
         model = tf.keras.Sequential([
             base_model,
