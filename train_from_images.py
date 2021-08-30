@@ -122,7 +122,7 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
     # Train function
     history = model.fit(
         dataset,
-        batch_size = 32,
+        validation_data = validation_dataset,
         epochs = epochs, 
         verbose = 1,
         callbacks = callbacks
