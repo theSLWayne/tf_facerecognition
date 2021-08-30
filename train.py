@@ -99,7 +99,8 @@ def train_model(dataset_path, model_save_path, epochs):
     ]
 
     # Create model
-    model = FacialRecog_Model(num_classes=3)
+    model_class = FacialRecog_Model(num_classes=5)
+    model = model_class.create_model()
 
     # Epochs
     epochs = epochs if epochs else config.train.epochs
@@ -109,7 +110,7 @@ def train_model(dataset_path, model_save_path, epochs):
         train_set,
         batch_size = 32,
         epochs = epochs,
-        validation_split = config.train.validation_split,
+        #validation_split = config.train.validation_split,
         verbose = 1,
         callbacks = callbacks
     )
