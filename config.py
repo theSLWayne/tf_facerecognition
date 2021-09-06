@@ -15,9 +15,9 @@ config = easydict()
 config.architecture = easydict()
 
 # Image height
-config.architecture.image_height = 180
+config.architecture.image_height = 224
 # Image width
-config.architecture.image_width = 180
+config.architecture.image_width = 224
 # Input channels
 config.architecture.input_channels = 3 # for RGB images
 # Number of hidden layers in the model
