@@ -20,7 +20,7 @@ from model import FacialRecog_Model
 def init_args():
     """
     
-    Processes data parsed as arguments with the script to create tfrecords files.
+    Processes data parsed as arguments with the script to train the model.
 
     :return: Prased arguments
     """
@@ -48,9 +48,9 @@ def validate_args(args):
 def load_data(dataset_path):
     '''
     
-    Loads train/test dataset from a directory and creates tensorflow datasets.
+    Loads train dataset from a directory and creates train & validation tensorflow datasets.
 
-    :param dataset_path: Path to the directory containing training/test data
+    :param dataset_path: Path to the directory containing training data
     :return: Train and validation datasets as tf.data.Dataset objects, label classes list
     '''
 
