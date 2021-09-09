@@ -12,7 +12,7 @@ import glog
 
 import argparse
 import os
-import pickle
+import glog as log
 
 from config import config
 from model import FacialRecog_Model
@@ -30,9 +30,6 @@ def init_args():
             help='Path to the test dataset', required=True)
     parser.add_argument('-mp', '--model_path', type=str,
             help='Path to the pre-trained Tensorflow SavedModel', required=True)
-    parser.add_argument('-d', '--preds_save_path', type=str,
-            help='Path of the directory where prediction details should be saved to', 
-            default=None)
 
     return parser.parse_args()
 
@@ -54,7 +51,7 @@ def load_data(dataset_path):
     Loads test dataset from a directory and creates a tensorflow dataset
 
     :param dataset_path: Path to the directory containing test data
-    :return: Test dataset as tf.data.Dataset object, file names list
+    :return: Test dataset as tf.data.Dataset object
     """
 
     # Load test data using keras preprocessing API
@@ -64,13 +61,49 @@ def load_data(dataset_path):
         batch_size=config.test.batch_size
     )
 
-    # List of filenames of the images in the loaded dataset
-    file_names = test_ds.fila_paths
-
     # Buffered prefetching to load images without I/O bottleneck
     AUTOTUNE = tf.data.AUTOTUNE
     test_ds = test_ds.prefetch(buffer_size=AUTOTUNE)
 
-    return test_ds, file_names
+    return test_ds
 
+def evaluate_model(dataset, model_path):
+    """
+    
+    Evaluates the provided model with the test set
 
+    :param dataset: Test dataset
+    :param model_path: Path to the Tensorflow SavedModel which would be evaluated
+    :return:
+    """
+
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
+
+    test_losses = model.evaluate(
+        dataset,
+        verbose=1,
+    )
+
+    log.info(test_losses)
+    log.info('Finished evaluation')
+
+if __name__ == '__main__':
+    """
+    Run script
+    """
+
+    # Initiate arguments
+    args = init_args()
+
+    # Argument validation
+    validate_args(args)
+
+    # Load dataset
+    dataset = load_data(args.dataset_path)
+
+    # Evaluate the model
+    evaluate_model(
+        dataset=dataset,
+        model_path=args.model_path,
+    )
