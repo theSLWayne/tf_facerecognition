@@ -13,6 +13,7 @@ import glog
 import argparse
 import os
 import pickle
+from datetime import datetime
 
 from config import config
 from model import FacialRecog_Model
@@ -108,15 +109,18 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
     :return:
     """
 
+    # Get current date and time for filenames
+    date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Callbacks
     callbacks = [
         # Save weights of the model at each epoch, if validation loss improves
-        tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/facial_recog.ckpt',
+        tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/facial_recog_{}.ckpt'.format(date_time),
                 save_weights_only = True, monitor = 'val_accuracy', mode = 'max', save_best_only = True),
         # Stop training when the monitored metric has stopped improving
         tf.keras.callbacks.EarlyStopping(monitor = 'val_accuracy', patience = config.train.patience_epochs),
         # Write training details to enable visualizations with tensorboard
-        tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard')
+        tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard/tensorboard_{}'.format(date_time))
     ]
 
     # Create Model
@@ -136,7 +140,7 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
     )
 
     # Save model
-    model.save('{}/facial_recog_model'.format(model_save_path))
+    model.save('{}/facial_recog_model_{}'.format(model_save_path, date_time))
 
 if __name__ == '__main__':
     """
