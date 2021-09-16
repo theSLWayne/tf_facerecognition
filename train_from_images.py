@@ -8,7 +8,7 @@ Train the facial recognition model using image dataset
 '''
 
 import tensorflow as tf
-import glog
+import glog as logger
 
 import argparse
 import os
@@ -123,12 +123,16 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
         tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard/tensorboard_{}'.format(date_time))
     ]
 
+    logger.info('Loading the model')
+
     # Create Model
     model_class = FacialRecog_Model(num_classes=num_classes)
     model = model_class.create_model()
 
     # Epochs
     epochs = epochs if epochs else config.train.epochs
+
+    logger.info('Initiating model training')
 
     # Train function
     history = model.fit(
@@ -138,6 +142,8 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
         verbose = 1,
         callbacks = callbacks
     )
+
+    logger.info('Training over. Saving the model...')
 
     # Finalize model save path
     save_path = os.path.join(model_save_path, 'models')
