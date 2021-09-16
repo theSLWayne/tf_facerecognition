@@ -8,11 +8,12 @@ Train the facial recognition model using image dataset
 '''
 
 import tensorflow as tf
-import glog
+import glog as logger
 
 import argparse
 import os
 import pickle
+from datetime import datetime
 
 from config import config
 from model import FacialRecog_Model
@@ -20,7 +21,7 @@ from model import FacialRecog_Model
 def init_args():
     """
     
-    Processes data parsed as arguments with the script to create tfrecords files.
+    Processes data parsed as arguments with the script to train the model.
 
     :return: Prased arguments
     """
@@ -48,9 +49,9 @@ def validate_args(args):
 def load_data(dataset_path):
     '''
     
-    Loads train/test dataset from a directory and creates tensorflow datasets.
+    Loads train dataset from a directory and creates train & validation tensorflow datasets.
 
-    :param dataset_path: Path to the directory containing training/test data
+    :param dataset_path: Path to the directory containing training data
     :return: Train and validation datasets as tf.data.Dataset objects, label classes list
     '''
 
@@ -108,16 +109,21 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
     :return:
     """
 
+    # Get current date and time for filenames
+    date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Callbacks
     callbacks = [
         # Save weights of the model at each epoch, if validation loss improves
-        tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/facial_recog.ckpt',
+        tf.keras.callbacks.ModelCheckpoint(filepath = 'checkpoints/facial_recog_{}.ckpt'.format(date_time),
                 save_weights_only = True, monitor = 'val_accuracy', mode = 'max', save_best_only = True),
         # Stop training when the monitored metric has stopped improving
         tf.keras.callbacks.EarlyStopping(monitor = 'val_accuracy', patience = config.train.patience_epochs),
         # Write training details to enable visualizations with tensorboard
-        tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard')
+        tf.keras.callbacks.TensorBoard(log_dir = 'tensorboard/tensorboard_{}'.format(date_time))
     ]
+
+    logger.info('Loading the model')
 
     # Create Model
     model_class = FacialRecog_Model(num_classes=num_classes)
@@ -125,6 +131,8 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
 
     # Epochs
     epochs = epochs if epochs else config.train.epochs
+
+    logger.info('Initiating model training')
 
     # Train function
     history = model.fit(
@@ -135,8 +143,17 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
         callbacks = callbacks
     )
 
+    logger.info('Training over. Saving the model...')
+
+    # Finalize model save path
+    save_path = os.path.join(model_save_path, 'models')
+
+    # Create models folder if it does not exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
     # Save model
-    model.save('{}/facial_recog_model'.format(model_save_path))
+    model.save('{}/facial_recog_model_{}'.format(save_path, date_time))
 
 if __name__ == '__main__':
     """
