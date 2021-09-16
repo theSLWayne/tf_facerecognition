@@ -139,8 +139,15 @@ def train_model(dataset, validation_dataset, model_save_path, epochs, num_classe
         callbacks = callbacks
     )
 
+    # Finalize model save path
+    save_path = os.path.join(model_save_path, 'models')
+
+    # Create models folder if it does not exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
     # Save model
-    model.save('{}/facial_recog_model_{}'.format(model_save_path, date_time))
+    model.save('{}/facial_recog_model_{}'.format(save_path, date_time))
 
 if __name__ == '__main__':
     """
