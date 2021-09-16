@@ -8,7 +8,6 @@ Evaluate the facial recognition model using image dataset(test set)
 '''
 
 import tensorflow as tf
-import glog
 
 import argparse
 import os
@@ -85,7 +84,7 @@ def evaluate_model(dataset, model_path):
         verbose=1,
     )
 
-    log.info(test_losses)
+    log.info('Loss: {} | Accuracy: {}'.format(test_losses[0], test_losses[1]))
     log.info('Finished evaluation')
 
 if __name__ == '__main__':
