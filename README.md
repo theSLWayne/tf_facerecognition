@@ -16,10 +16,10 @@ A facial recognition software created using Tensorflow 2.6
         - [2.2.1. Create environment](#crenvcon)
         - [2.2.2. Activate environment](#actenvcon)
         - [2.2.3. Deactivate environment](#deactenvcon)
-3. Configurations
-    - 3.1. Architecture
-    - 3.2. Train
-    - 3.3. Test
+3. [Configurations](#configs)
+    - [3.1. Architecture](#configarch)
+    - [3.2. Train](#configtrain)
+    - [3.3. Test](#configtest)
 4. Model Architecture
 5. Train
     - 5.1. Dataset Preparation
@@ -148,13 +148,13 @@ Make sure you have successfully installed [Conda](https://docs.conda.io/en/lates
 
 If you followed the above steps properly, now you're ready to run scripts.
 
-## 3. Configurations
+## 3. Configurations <a name="configs"></a>
 
 - All configurations can be found at `config.py`. 
 
 - Configurations are divided into *Architecture*, *Train* and *Test* for ease of use.
 
-### 3.1. Architecture
+### 3.1. Architecture <a name="configarch"></a>
 
 | Config | Description | Notes |
 |--------|-------------|-------|
@@ -164,7 +164,7 @@ If you followed the above steps properly, now you're ready to run scripts.
 | `hidden_layers` | Number of hidden layers(Dense layers) in the model | Use less layers for simple models and more layers for more complicated models |
 | `dropout_rate` | Dropuot rate to be used in Dropout layers in the model | Use a value between 0 and 1 |
 
-### 3.2. Train
+### 3.2. Train <a name="configtrain"></a>
 
 | Config | Description | Notes |
 |--------|-------------|-------|
@@ -174,9 +174,10 @@ If you followed the above steps properly, now you're ready to run scripts.
 | `patience_epochs` | Number of epochs with no improvement after which training will be stopped | If the validation accuracy does not improve for this many epochs, training process will stoped |
 | `validation_split` | Portion of the training dataset that is plit for validation | Use a value between 0 and 1 |
 
-### 3.3. Test
+### 3.3. Test <a name="configtest"></a>
 
 | Config | Description | Notes |
 |--------|-------------|-------|
 | `batch_size` | Size of image batches used in evaluating models | Suggested values: 8, 16, 32, 64, 128 | 
+
 
