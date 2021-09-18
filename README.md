@@ -16,21 +16,31 @@ A facial recognition software created using Tensorflow 2.6
         - [2.2.1. Create environment](#crenvcon)
         - [2.2.2. Activate environment](#actenvcon)
         - [2.2.3. Deactivate environment](#deactenvcon)
-3. Train
-    - 3.1. Dataset Preparation
-    - 3.2. Classes
-    - 3.3. Checkpoints
-    - 3.4. Models
-    - 3.5. Tensorboard
-4. Evaluate
-5. Predictions[WIP]
-6. TFRecords[WIP]
-    - 6.1. Create TFRecords
-    - 6.2. Train
-    - 6.3. Evaluate
-7. Training Attempts
-8. Models - trained model example using faces dataset and link to the dataset
-9. Dependencies
+3. Configurations
+    - 3.1. Architecture
+    - 3.2. Train
+    - 3.3. Test
+4. Model Architecture
+5. Train
+    - 5.1. Dataset Preparation
+    - 5.2. Syntax
+    - 5.3. Arguments
+    - 5.4. Classes
+    - 5.5. Checkpoints
+    - 5.6. Models
+    - 5.7. Tensorboard
+6. Evaluate
+    - 6.1. Dataset Preparation
+    - 6.2. Syntax
+    - 6.3. Arguments
+7. Predictions[WIP]
+8. TFRecords[WIP]
+    - 8.1. Create TFRecords
+    - 8.2. Train
+    - 8.3. Evaluate
+9. Training Attempts
+10. Models - trained model example using faces dataset and link to the dataset
+11. Dependencies
 
 ## 1. Introduction <a name="intro"></a>
 
@@ -136,4 +146,37 @@ Make sure you have successfully installed [Conda](https://docs.conda.io/en/lates
     conda deactivate
     ```
 
-If you folled the above steps properly, now you're ready to run scripts.
+If you followed the above steps properly, now you're ready to run scripts.
+
+## 3. Configurations
+
+- All configurations can be found at `config.py`. 
+
+- Configurations are divided into *Architecture*, *Train* and *Test* for ease of use.
+
+### 3.1. Architecture
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `image_height` | Height of an image processed by scripts | Will be used in reading images and setting model input shape |
+| `image_width` | Width of an image processed by scripts | Will be used in reading images and setting model input shape |
+| `input_channels` | Number of channels in input images | Use default **3** for RGB images. |
+| `hidden_layers` | Number of hidden layers(Dense layers) in the model | Use less layers for simple models and more layers for more complicated models |
+| `dropout_rate` | Dropuot rate to be used in Dropout layers in the model | Use a value between 0 and 1 |
+
+### 3.2. Train
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `batch_size` | Size of image batches used in loading images, training  | Suggested values: 8, 16, 32, 64, 128 |
+| `epochs` | Number of epochs the model should trin for | An integer value must be used |
+| `learning_rate` | Learning rate of the optimixer algorithm | Can be changed to prevent overfitting/underfitting |
+| `patience_epochs` | Number of epochs with no improvement after which training will be stopped | If the validation accuracy does not improve for this many epochs, training process will stoped |
+| `validation_split` | Portion of the training dataset that is plit for validation | Use a value between 0 and 1 |
+
+### 3.3. Test
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `batch_size` | Size of image batches used in evaluating models | Suggested values: 8, 16, 32, 64, 128 | 
+
