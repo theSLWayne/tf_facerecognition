@@ -303,4 +303,10 @@ python train_from_images.py
     tensorboard --logdir tensorboard/tensorboard_20210220_125609
     ```
 
+- After the server is started, navigate to the link displayed on the terminal and a dashboard similar to the one in image below will be rendered on your web browser.
+
+![Sample Tensorboard Dashboard](docs/tboard.png)
+<p align="center">Image courtesy: <a href="https://www.tensorflow.org/tensorboard/get_started">Get started with TensorBoard</a</p>
+
+
 
