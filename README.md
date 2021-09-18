@@ -26,9 +26,9 @@ A facial recognition software created using Tensorflow 2.6
     - [5.2. Syntax](#trainsyn)
     - [5.3. Arguments](#trainargs)
     - [5.4. Classes](#traincls)
-    - 5.5. Checkpoints
-    - 5.6. Models
-    - 5.7. Tensorboard
+    - [5.5. Checkpoints](#trainckpts)
+    - [5.6. Models](#trainmodels)
+    - [5.7. Tensorboard](#tboard)
 6. Evaluate Model
     - 6.1. Dataset Preparation
     - 6.2. Syntax
@@ -264,5 +264,43 @@ python train_from_images.py
 | `-e` / `--epochs` | Number of epochs to train | **Not Mandatory**. If a value is passed, it will override the value in `epochs` configuration. |
 
 ### 5.4. Classes <a name="traincls"></a>
+
+- Classes in the dataset will be saved into a pickle file named `classes.pkl` after loading the images from the dataset folder.
+
+- Class names will be derived from the folder names in the dataset folder. Make sure there aren't any unwanted folders inside the dataset folder.
+
+- For the file structure mentioned in the [Dataset Peparation](#dataprep), the pickle file will save class names as a list like [`Amal`, `Max`, `Sebastian`, `Lihini`, `Christina`]
+
+### 5.5. Checkpoints <a name="trainckpts"></a>
+
+- A checkpoint will be saved which will contain **ONLY** the weights of the epoch with the maximum validation accuracy to the `checkpoints` folder. 
+
+- The checkpoint file will be named as `facial_recog_{date}_{time}.ckpt`.
+
+### 5.6. Models <a name="trainmodels"></a>
+
+- After training finishes, the complete trained model will be saved to the path specified by the `--model_save_path` argument.
+
+- The model will be saved in a folder named as `facial_recog_model_{date}_{time}`.
+
+### 5.7. Tensorboard <a name="tboard"></a>
+
+- Training and validation metrics(loss and accuracy) for all trained epochs will be saved so that they can be used to visualizations using [Tensorboard](https://www.tensorflow.org/tensorboard).
+
+- These data will be saved to `tensorboard` folder.
+
+- Each time a model is trained, a separate folder will be created inside the `tensorboard` folder named `tensorboard_{date}_{time}`.
+
+- Simply run the following command to start the Tensorboard server to visualize training metrics.
+
+    ```
+    tensorboard --logdir tensorboard/tensorboard_{date}_{time}
+    ```
+
+- For an example, if the model was trained on 20/02/2021 at 12:56:09, it will create a tensorboard data folder named `tensorboard_20210220_125609` and the follwing command will start the Tensorboard server.
+
+    ```
+    tensorboard --logdir tensorboard/tensorboard_20210220_125609
+    ```
 
 
