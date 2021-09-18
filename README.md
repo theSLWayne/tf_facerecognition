@@ -20,8 +20,8 @@ A facial recognition software created using Tensorflow 2.6
     - [3.1. Architecture](#configarch)
     - [3.2. Train](#configtrain)
     - [3.3. Test](#configtest)
-4. Model Architecture
-5. Train
+4. [Model Architecture](#modelarch)
+5. Train Model
     - 5.1. Dataset Preparation
     - 5.2. Syntax
     - 5.3. Arguments
@@ -29,7 +29,7 @@ A facial recognition software created using Tensorflow 2.6
     - 5.5. Checkpoints
     - 5.6. Models
     - 5.7. Tensorboard
-6. Evaluate
+6. Evaluate Model
     - 6.1. Dataset Preparation
     - 6.2. Syntax
     - 6.3. Arguments
@@ -49,6 +49,8 @@ A facial recognition software created using Tensorflow 2.6
 - This project contains of a [Convolutional Neural Network(CNN)](https://en.wikipedia.org/wiki/Convolutional_neural_network) model and it can be  trained for a dataset containing faces of the people that need to be detected/recognized by the model.
 
 - After a model is trained for a dataset, it can be used to recognize faces that were part of the training dataset. 
+
+- **The model can be trained or evaluated using image datasets as they are or tfrecord datasets can be created using them. If the datasets are larger, the latter is recommended.**
 
 ## 2. Setup <a name="setup"></a>
 
@@ -180,4 +182,29 @@ If you followed the above steps properly, now you're ready to run scripts.
 |--------|-------------|-------|
 | `batch_size` | Size of image batches used in evaluating models | Suggested values: 8, 16, 32, 64, 128 | 
 
+## 4. Model Architecture <a name="modelarch"></a>
 
+Current architecture of the facial recognition model:
+
+    ```
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #
+    =================================================================
+    mobilenetv2_1.00_224 (Functi (None, 6, 6, 1280)        2257984
+    conv2d (Conv2D)              (None, 4, 4, 32)          368672
+    _________________________________________________________________
+    dropout (Dropout)            (None, 4, 4, 32)          0
+    _________________________________________________________________
+    global_average_pooling2d (Gl (None, 32)                0
+    _________________________________________________________________
+    dense (Dense)                (None, 3)                 99
+    =================================================================
+    Total params: 2,626,755
+    Trainable params: 368,771
+    Non-trainable params: 2,257,984
+    _________________________________________________________________
+    ```
+
+- A pre-trained [MobileNetV2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2/MobileNetV2) model is used for image feature extraction.
+
+## 5. 
