@@ -16,21 +16,31 @@ A facial recognition software created using Tensorflow 2.6
         - [2.2.1. Create environment](#crenvcon)
         - [2.2.2. Activate environment](#actenvcon)
         - [2.2.3. Deactivate environment](#deactenvcon)
-3. Train
-    - 3.1. Dataset Preparation
-    - 3.2. Classes
-    - 3.3. Checkpoints
-    - 3.4. Models
-    - 3.5. Tensorboard
-4. Evaluate
-5. Predictions[WIP]
-6. TFRecords[WIP]
-    - 6.1. Create TFRecords
-    - 6.2. Train
-    - 6.3. Evaluate
-7. Training Attempts
-8. Models - trained model example using faces dataset and link to the dataset
-9. Dependencies
+3. [Configurations](#configs)
+    - [3.1. Architecture](#configarch)
+    - [3.2. Train](#configtrain)
+    - [3.3. Test](#configtest)
+4. [Model Architecture](#modelarch)
+5. [Train Model](#train)
+    - [5.1. Dataset Preparation](#dataprep)
+    - [5.2. Syntax](#trainsyn)
+    - [5.3. Arguments](#trainargs)
+    - [5.4. Classes](#traincls)
+    - [5.5. Checkpoints](#trainckpts)
+    - [5.6. Models](#trainmodels)
+    - [5.7. Tensorboard](#tboard)
+6. Evaluate Model
+    - 6.1. Dataset Preparation
+    - 6.2. Syntax
+    - 6.3. Arguments
+7. Predictions[WIP]
+8. TFRecords[WIP]
+    - 8.1. Create TFRecords
+    - 8.2. Train
+    - 8.3. Evaluate
+9. Training Attempts
+10. Models - trained model example using faces dataset and link to the dataset
+11. Dependencies
 
 ## 1. Introduction <a name="intro"></a>
 
@@ -39,6 +49,8 @@ A facial recognition software created using Tensorflow 2.6
 - This project contains of a [Convolutional Neural Network(CNN)](https://en.wikipedia.org/wiki/Convolutional_neural_network) model and it can be  trained for a dataset containing faces of the people that need to be detected/recognized by the model.
 
 - After a model is trained for a dataset, it can be used to recognize faces that were part of the training dataset. 
+
+- **The model can be trained or evaluated using image datasets as they are or tfrecord datasets can be created using them. If the datasets are larger, the latter is recommended.**
 
 ## 2. Setup <a name="setup"></a>
 
@@ -136,4 +148,159 @@ Make sure you have successfully installed [Conda](https://docs.conda.io/en/lates
     conda deactivate
     ```
 
-If you folled the above steps properly, now you're ready to run scripts.
+If you followed the above steps properly, now you're ready to run scripts.
+
+## 3. Configurations <a name="configs"></a>
+
+- All configurations can be found at `config.py`. 
+
+- Configurations are divided into *Architecture*, *Train* and *Test* for ease of use.
+
+### 3.1. Architecture <a name="configarch"></a>
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `image_height` | Height of an image processed by scripts | Will be used in reading images and setting model input shape |
+| `image_width` | Width of an image processed by scripts | Will be used in reading images and setting model input shape |
+| `input_channels` | Number of channels in input images | Use default **3** for RGB images. |
+| `hidden_layers` | Number of hidden layers(Dense layers) in the model | Use less layers for simple models and more layers for more complicated models |
+| `dropout_rate` | Dropuot rate to be used in Dropout layers in the model | Use a value between 0 and 1 |
+
+### 3.2. Train <a name="configtrain"></a>
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `batch_size` | Size of image batches used in loading images, training  | Suggested values: 8, 16, 32, 64, 128 |
+| `epochs` | Number of epochs the model should trin for | An integer value must be used. This can be overridden using the `--epochs` argument in training script. For more details, see [Train Model](#train) section |
+| `learning_rate` | Learning rate of the optimixer algorithm | Can be changed to prevent overfitting/underfitting |
+| `patience_epochs` | Number of epochs with no improvement after which training will be stopped | If the validation accuracy does not improve for this many epochs, training process will stoped |
+| `validation_split` | Portion of the training dataset that is plit for validation | Use a value between 0 and 1 |
+
+### 3.3. Test <a name="configtest"></a>
+
+| Config | Description | Notes |
+|--------|-------------|-------|
+| `batch_size` | Size of image batches used in evaluating models | Suggested values: 8, 16, 32, 64, 128 | 
+
+## 4. Model Architecture <a name="modelarch"></a>
+
+Current architecture of the facial recognition model:
+
+    ```
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #
+    =================================================================
+    mobilenetv2_1.00_224 (Functi (None, 6, 6, 1280)        2257984
+    conv2d (Conv2D)              (None, 4, 4, 32)          368672
+    _________________________________________________________________
+    dropout (Dropout)            (None, 4, 4, 32)          0
+    _________________________________________________________________
+    global_average_pooling2d (Gl (None, 32)                0
+    _________________________________________________________________
+    dense (Dense)                (None, 3)                 99
+    =================================================================
+    Total params: 2,626,755
+    Trainable params: 368,771
+    Non-trainable params: 2,257,984
+    _________________________________________________________________
+    ```
+
+- A pre-trained [MobileNetV2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2/MobileNetV2) model is used for image feature extraction.
+
+## 5. Train Model <a name="train"></a>
+
+Below is a guide to train the model from scratch using image datasets(without converting them to tfrecords. For tfrecords option, see [TFRecords] below)
+
+### 5.1. Dataset Preparation <a name="dataprep"></a>
+
+**To work with the scripts, train and test datasets should be created as follows**.
+
+- Whole dataset should be inside a single folder.
+
+- Inside that folder, there should be separate folders for each class. In this case, a folder for each person that is in the dataset. Each folder needs to be renamed after the person's name.
+
+- Images that contain the face of relevant employee should be inside each folder.
+
+For an example, Let's assume that there are 5 employees in a company. They are named `Amal`, `Max`, `Sebastian`, `Lihini` and `Christina`. If the company wants to train a model to enable facial recognition for them, their train and test datasets should have a structure as follows:
+
+```
+dataset
+|-Amal
+|   |-amal1.jpg
+|   |-amal2.jpg
+|-Max
+|   |-max1.jpg
+|   |-max2.jpg
+|-Sebastian
+|   |-sebastian1.jpg
+|   |-sebastian2.jpg
+|-Lihini
+|   |-lihini1.jpg
+|   |-lihini2.jpg
+|-Christina
+|   |-chris1.jpg
+|   |-chris2.jpg
+```
+
+**NOTE: Image files are not required to conform to any naming conventions**.
+
+### 5.2. Syntax <a name="trainsyn"></a>
+
+- `train_from_images.py` is used to train facial recognition model. The syntax is as follows.
+
+```
+python train_from_images.py
+    --dataset_path PATH/TO/THE/FOLDER/CONTAINING/TRAINING/DATASET
+    --model_save_path PATH/TO/THE/FOLDER/MODEL/SHOULD/BE/SAVED/TO
+    -- epochs NUMBER/OF/EPOCHS/TO/TRAIN
+```
+
+### 5.3. Arguments <a name="trainargs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-m` / `--model_save_path` | Path of the folder to save the trained model | A model named with proper naming conventions (discussed in [Models] section) will be saved tho this location |
+| `-e` / `--epochs` | Number of epochs to train | **Not Mandatory**. If a value is passed, it will override the value in `epochs` configuration. |
+
+### 5.4. Classes <a name="traincls"></a>
+
+- Classes in the dataset will be saved into a pickle file named `classes.pkl` after loading the images from the dataset folder.
+
+- Class names will be derived from the folder names in the dataset folder. Make sure there aren't any unwanted folders inside the dataset folder.
+
+- For the file structure mentioned in the [Dataset Peparation](#dataprep), the pickle file will save class names as a list like [`Amal`, `Max`, `Sebastian`, `Lihini`, `Christina`]
+
+### 5.5. Checkpoints <a name="trainckpts"></a>
+
+- A checkpoint will be saved which will contain **ONLY** the weights of the epoch with the maximum validation accuracy to the `checkpoints` folder. 
+
+- The checkpoint file will be named as `facial_recog_{date}_{time}.ckpt`.
+
+### 5.6. Models <a name="trainmodels"></a>
+
+- After training finishes, the complete trained model will be saved to the path specified by the `--model_save_path` argument.
+
+- The model will be saved in a folder named as `facial_recog_model_{date}_{time}`.
+
+### 5.7. Tensorboard <a name="tboard"></a>
+
+- Training and validation metrics(loss and accuracy) for all trained epochs will be saved so that they can be used to visualizations using [Tensorboard](https://www.tensorflow.org/tensorboard).
+
+- These data will be saved to `tensorboard` folder.
+
+- Each time a model is trained, a separate folder will be created inside the `tensorboard` folder named `tensorboard_{date}_{time}`.
+
+- Simply run the following command to start the Tensorboard server to visualize training metrics.
+
+    ```
+    tensorboard --logdir tensorboard/tensorboard_{date}_{time}
+    ```
+
+- For an example, if the model was trained on 20/02/2021 at 12:56:09, it will create a tensorboard data folder named `tensorboard_20210220_125609` and the follwing command will start the Tensorboard server.
+
+    ```
+    tensorboard --logdir tensorboard/tensorboard_20210220_125609
+    ```
+
+
