@@ -21,11 +21,11 @@ A facial recognition software created using Tensorflow 2.6
     - [3.2. Train](#configtrain)
     - [3.3. Test](#configtest)
 4. [Model Architecture](#modelarch)
-5. Train Model
-    - 5.1. Dataset Preparation
-    - 5.2. Syntax
-    - 5.3. Arguments
-    - 5.4. Classes
+5. [Train Model](#train)
+    - [5.1. Dataset Preparation](#dataprep)
+    - [5.2. Syntax](#trainsyn)
+    - [5.3. Arguments](#trainargs)
+    - [5.4. Classes](#traincls)
     - 5.5. Checkpoints
     - 5.6. Models
     - 5.7. Tensorboard
@@ -171,7 +171,7 @@ If you followed the above steps properly, now you're ready to run scripts.
 | Config | Description | Notes |
 |--------|-------------|-------|
 | `batch_size` | Size of image batches used in loading images, training  | Suggested values: 8, 16, 32, 64, 128 |
-| `epochs` | Number of epochs the model should trin for | An integer value must be used |
+| `epochs` | Number of epochs the model should trin for | An integer value must be used. This can be overridden using the `--epochs` argument in training script. For more details, see [Train Model](#train) section |
 | `learning_rate` | Learning rate of the optimixer algorithm | Can be changed to prevent overfitting/underfitting |
 | `patience_epochs` | Number of epochs with no improvement after which training will be stopped | If the validation accuracy does not improve for this many epochs, training process will stoped |
 | `validation_split` | Portion of the training dataset that is plit for validation | Use a value between 0 and 1 |
@@ -207,4 +207,62 @@ Current architecture of the facial recognition model:
 
 - A pre-trained [MobileNetV2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2/MobileNetV2) model is used for image feature extraction.
 
-## 5. 
+## 5. Train Model <a name="train"></a>
+
+Below is a guide to train the model from scratch using image datasets(without converting them to tfrecords. For tfrecords option, see [TFRecords] below)
+
+### 5.1. Dataset Preparation <a name="dataprep"></a>
+
+**To work with the scripts, train and test datasets should be created as follows**.
+
+- Whole dataset should be inside a single folder.
+
+- Inside that folder, there should be separate folders for each class. In this case, a folder for each person that is in the dataset. Each folder needs to be renamed after the person's name.
+
+- Images that contain the face of relevant employee should be inside each folder.
+
+For an example, Let's assume that there are 5 employees in a company. They are named `Amal`, `Max`, `Sebastian`, `Lihini` and `Christina`. If the company wants to train a model to enable facial recognition for them, their train and test datasets should have a structure as follows:
+
+```
+dataset
+|-Amal
+|   |-amal1.jpg
+|   |-amal2.jpg
+|-Max
+|   |-max1.jpg
+|   |-max2.jpg
+|-Sebastian
+|   |-sebastian1.jpg
+|   |-sebastian2.jpg
+|-Lihini
+|   |-lihini1.jpg
+|   |-lihini2.jpg
+|-Christina
+|   |-chris1.jpg
+|   |-chris2.jpg
+```
+
+**NOTE: Image files are not required to conform to any naming conventions**.
+
+### 5.2. Syntax <a name="trainsyn"></a>
+
+- `train_from_images.py` is used to train facial recognition model. The syntax is as follows.
+
+```
+python train_from_images.py
+    --dataset_path PATH/TO/THE/FOLDER/CONTAINING/TRAINING/DATASET
+    --model_save_path PATH/TO/THE/FOLDER/MODEL/SHOULD/BE/SAVED/TO
+    -- epochs NUMBER/OF/EPOCHS/TO/TRAIN
+```
+
+### 5.3. Arguments <a name="trainargs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-m` / `--model_save_path` | Path of the folder to save the trained model | A model named with proper naming conventions (discussed in [Models] section) will be saved tho this location |
+| `-e` / `--epochs` | Number of epochs to train | **Not Mandatory**. If a value is passed, it will override the value in `epochs` configuration. |
+
+### 5.4. Classes <a name="traincls"></a>
+
+
