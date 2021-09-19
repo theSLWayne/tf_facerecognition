@@ -41,6 +41,7 @@ A facial recognition software created using Tensorflow 2.6
     - [8.2. Train](#traintfrecs)
     - [8.3. Evaluate](#evaltfrecs)
 9. [Training Attempts](#trains)
+    - 
 10. [Dependencies](#deps)
 
 ## 1. Introduction <a name="intro"></a>
@@ -405,7 +406,7 @@ python create_tfrecords.py
 
 <p align="right"><a href="#toc">Table of contents ↑</a></p>
 
-
+- Details and results of training attempts will be added here.
 
 ## 10. Dependencies <a name="deps"></a>
 
