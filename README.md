@@ -40,9 +40,8 @@ A facial recognition software created using Tensorflow 2.6
         - [8.1.2. Arguments](#argstfrecs)
     - [8.2. Train](#traintfrecs)
     - [8.3. Evaluate](#evaltfrecs)
-9. Training Attempts
-10. Models - trained model example using faces dataset and link to the dataset
-11. Dependencies
+9. [Training Attempts](#trains)
+10. [Dependencies](#deps)
 
 ## 1. Introduction <a name="intro"></a>
 
@@ -401,3 +400,27 @@ python create_tfrecords.py
 ### 8.3. Evaluate <a name="evaltfrecs"></a>
 
 - Scripts to evaluate a model using TFRecords has not been implemented yet.
+
+## 9. Training Attempts <a name="trains"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+
+
+## 10. Dependencies <a name="deps"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+Below are the main dependencies of the repository:
+
+```
+tensorflow-gpu==2.6.0
+scikit-learn==0.24.1
+matplotlib==3.3.4
+pandas==1.2.4
+ipython==7.22.0
+numpy==1.19.5
+seaborn==0.11.1
+joblib==1.0.1
+glog==0.3.1
+```
