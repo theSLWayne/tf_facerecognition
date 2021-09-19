@@ -2,7 +2,7 @@
 
 A facial recognition software created using Tensorflow 2.6
 
-## Table of Contents
+## Table of Contents <a name="toc"></a>
 
 1. [Introduction](#intro)
 2. [Setup](#setup)
@@ -34,7 +34,7 @@ A facial recognition software created using Tensorflow 2.6
     - [6.2. Syntax](#evalsyn)
     - [6.3. Arguments](#evalargs)
 7. [Predictions{WIP}](#preds)
-8. TFRecords[WIP]
+8. [TFRecords{WIP}](#tfrecs)
     - 8.1. Create TFRecords
     - 8.2. Train
     - 8.3. Evaluate
@@ -43,6 +43,8 @@ A facial recognition software created using Tensorflow 2.6
 11. Dependencies
 
 ## 1. Introduction <a name="intro"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 - This is a project created for facial recognition. 
 
@@ -340,5 +342,13 @@ python evaluate_from_images.py
 - Taking predictions for a single image using a trained model.
 
 - Still work in progress.
+
+## 8. TFRecords - [Work In Progress] <a name="tfrecs"></a>
+
+- The option to train and evaluate models using TFRecords.
+
+- Refer [this link](https://www.tensorflow.org/tutorials/load_data/tfrecord) For further details about TFRecords.
+
+- This method is recommended if the size of the train and evaluation datasets are bigger.
 
 
