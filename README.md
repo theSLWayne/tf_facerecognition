@@ -29,10 +29,10 @@ A facial recognition software created using Tensorflow 2.6
     - [5.5. Checkpoints](#trainckpts)
     - [5.6. Models](#trainmodels)
     - [5.7. Tensorboard](#tboard)
-6. Evaluate Model
-    - 6.1. Dataset Preparation
-    - 6.2. Syntax
-    - 6.3. Arguments
+6. [Evaluate Model](#eval)
+    - [6.1. Dataset Preparation](#evaldataprep)
+    - [6.2. Syntax](#evalsyn)
+    - [6.3. Arguments](#evalargs)
 7. Predictions[WIP]
 8. TFRecords[WIP]
     - 8.1. Create TFRecords
@@ -252,7 +252,7 @@ dataset
 python train_from_images.py
     --dataset_path PATH/TO/THE/FOLDER/CONTAINING/TRAINING/DATASET
     --model_save_path PATH/TO/THE/FOLDER/MODEL/SHOULD/BE/SAVED/TO
-    -- epochs NUMBER/OF/EPOCHS/TO/TRAIN
+    --epochs NUMBER/OF/EPOCHS/TO/TRAIN
 ```
 
 ### 5.3. Arguments <a name="trainargs"></a>
@@ -308,5 +308,30 @@ python train_from_images.py
 ![Sample Tensorboard Dashboard](docs/tboard.png)
 <p align="center">Image courtesy: <a href="https://www.tensorflow.org/tensorboard/get_started">Get started with TensorBoard</a</p>
 
+## 6. Evaluate Model <a name="eval"></a>
 
+Following is a guide to evaluate trained models.
+
+- Currently the script is enabled to evaluate **fully saved models only**. Functionality to evaluate saved weights on checkpoint files has not been implemented yet.
+
+### 6.1. Dataset Preparation <a name="evaldataprep"></a>
+
+- The evaluation dataset should conform to the dataset structure described in [Dataset Preparation](#dataprep) in the [Train Model](#train) section.
+
+### 6.2. Syntax <a name="evalsyn"></a>
+
+- `evaluate_from_images.py` is used to train facial recognition model. The syntax is as follows.
+
+```
+python evaluate_from_images.py
+    --dataset_path PATH/TO/THE/FOLDER/CONTAINING/EVALUATION/DATASET
+    --model_path PATH/TO/THE/TRAINED/MODEL/THAT/NEEDS/TO/BE/EVALUATED
+```
+
+### 6.3. Arguments <a name="evalargs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the folder containing evaluation data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-mp` / `--model_path` | Path to the saved model that needs to be evaluated | Should be a valid path to a Tensorflow SavedModel |
 
