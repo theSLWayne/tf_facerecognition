@@ -56,6 +56,8 @@ A facial recognition software created using Tensorflow 2.6
 
 ## 2. Setup <a name="setup"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 - In order to run this script, an environment needs to be created and all the dependencies of this code should be installed to the created environment.
 
 - The script was developed using **Python 3.8.8** and thus the recommended version for running scripts in this repository.
@@ -154,6 +156,8 @@ If you followed the above steps properly, now you're ready to run scripts.
 
 ## 3. Configurations <a name="configs"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 - All configurations can be found at `config.py`. 
 
 - Configurations are divided into *Architecture*, *Train* and *Test* for ease of use.
@@ -186,6 +190,8 @@ If you followed the above steps properly, now you're ready to run scripts.
 
 ## 4. Model Architecture <a name="modelarch"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 Current architecture of the facial recognition model:
 
     ```
@@ -210,6 +216,8 @@ Current architecture of the facial recognition model:
 - A pre-trained [MobileNetV2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2/MobileNetV2) model is used for image feature extraction.
 
 ## 5. Train Model <a name="train"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 Below is a guide to train the model from scratch using image datasets(without converting them to tfrecords. For tfrecords option, see [TFRecords] below)
 
@@ -312,6 +320,8 @@ python train_from_images.py
 
 ## 6. Evaluate Model <a name="eval"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 Following is a guide to evaluate trained models.
 
 - Currently the script is enabled to evaluate **fully saved models only**. Functionality to evaluate saved weights on checkpoint files has not been implemented yet.
@@ -339,11 +349,15 @@ python evaluate_from_images.py
 
 ## 7. Predictions - [Work In Progress] <a name="preds"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 - Taking predictions for a single image using a trained model.
 
 - Still work in progress.
 
 ## 8. TFRecords - [Work In Progress] <a name="tfrecs"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 - The option to train and evaluate models using TFRecords.
 
