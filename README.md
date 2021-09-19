@@ -35,9 +35,11 @@ A facial recognition software created using Tensorflow 2.6
     - [6.3. Arguments](#evalargs)
 7. [Predictions{WIP}](#preds)
 8. [TFRecords{WIP}](#tfrecs)
-    - 8.1. Create TFRecords
-    - 8.2. Train
-    - 8.3. Evaluate
+    - [8.1. Create TFRecords](#createtfrecs)
+        - [8.1.1. Syntax](#syntfrecs)
+        - [8.1.2. Arguments](#argstfrecs)
+    - [8.2. Train](#traintfrecs)
+    - [8.3. Evaluate](#evaltfrecs)
 9. Training Attempts
 10. Models - trained model example using faces dataset and link to the dataset
 11. Dependencies
@@ -269,7 +271,7 @@ python train_from_images.py
 
 | Argument | Description | Notes |
 |----------|-------------|-------|
-| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
 | `-m` / `--model_save_path` | Path of the folder to save the trained model | A model named with proper naming conventions (discussed in [Models] section) will be saved tho this location |
 | `-e` / `--epochs` | Number of epochs to train | **Not Mandatory**. If a value is passed, it will override the value in `epochs` configuration. |
 
@@ -340,11 +342,13 @@ python evaluate_from_images.py
     --model_path PATH/TO/THE/TRAINED/MODEL/THAT/NEEDS/TO/BE/EVALUATED
 ```
 
+- After the completion of evaluation, loss and accuracy will be displayed.
+
 ### 6.3. Arguments <a name="evalargs"></a>
 
 | Argument | Description | Notes |
 |----------|-------------|-------|
-| `-p` / `--dataset_path` | Path to the folder containing evaluation data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-p` / `--dataset_path` | Path to the folder containing evaluation data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
 | `-mp` / `--model_path` | Path to the saved model that needs to be evaluated | Should be a valid path to a Tensorflow SavedModel |
 
 ## 7. Predictions - [Work In Progress] <a name="preds"></a>
@@ -365,4 +369,35 @@ python evaluate_from_images.py
 
 - This method is recommended if the size of the train and evaluation datasets are bigger.
 
+- TFRecords files for train and evaluation sets should be created prior to train and evaluation processes.
 
+### 8.1. Create TFRecords <a name="createtfrecs"></a>
+
+- `create_tfrecords.py` is used to create TFRecords.
+
+#### 8.1.1. Syntax <a name="syntfrecs"></a>
+
+```
+python create_tfrecords.py
+    --dataset_path PATH/TO/THE/DATASET
+    --mode DATASET/TYPE
+    --output_path PATH/TO/THE/FOLDER/TO/SAVE/TFRECORDS
+```
+
+- After execution, a TFRecords file named `{mode}.tfrecords` will be saved in the folder specified by *output_path*.
+
+#### 8.1.2. Arguments <a name="argstfrecs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the folder containing train/test dataset |  This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
+| `-m` / `--mode` | Type of the dataset | Enter `Train` to create train set, `Test` to create test set. Not case sensitive. Defaulted to `Train` |
+| `-o` / `--output_path` | Path to the folder where TFRecords file/s should be written into | Make sure to enter a path to a valid folder |
+
+### 8.2. Train <a name="trainfrecs"></a>
+
+- Scripts to train a model using TFRecords has not been implemented yet.
+
+### 8.3. Evaluate <a name="evaltfrecs"></a>
+
+- Scripts to evaluate a model using TFRecords has not been implemented yet.
