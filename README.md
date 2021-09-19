@@ -33,7 +33,7 @@ A facial recognition software created using Tensorflow 2.6
     - [6.1. Dataset Preparation](#evaldataprep)
     - [6.2. Syntax](#evalsyn)
     - [6.3. Arguments](#evalargs)
-7. Predictions[WIP]
+7. [Predictions{WIP}](#preds)
 8. TFRecords[WIP]
     - 8.1. Create TFRecords
     - 8.2. Train
@@ -334,4 +334,11 @@ python evaluate_from_images.py
 |----------|-------------|-------|
 | `-p` / `--dataset_path` | Path to the folder containing evaluation data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
 | `-mp` / `--model_path` | Path to the saved model that needs to be evaluated | Should be a valid path to a Tensorflow SavedModel |
+
+## 7. Predictions - [Work In Progress] <a name="preds"></a>
+
+- Taking predictions for a single image using a trained model.
+
+- Still work in progress.
+
 
