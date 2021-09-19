@@ -2,7 +2,7 @@
 
 A facial recognition software created using Tensorflow 2.6
 
-## Table of Contents
+## Table of Contents <a name="toc"></a>
 
 1. [Introduction](#intro)
 2. [Setup](#setup)
@@ -29,20 +29,24 @@ A facial recognition software created using Tensorflow 2.6
     - [5.5. Checkpoints](#trainckpts)
     - [5.6. Models](#trainmodels)
     - [5.7. Tensorboard](#tboard)
-6. Evaluate Model
-    - 6.1. Dataset Preparation
-    - 6.2. Syntax
-    - 6.3. Arguments
-7. Predictions[WIP]
-8. TFRecords[WIP]
-    - 8.1. Create TFRecords
-    - 8.2. Train
-    - 8.3. Evaluate
+6. [Evaluate Model](#eval)
+    - [6.1. Dataset Preparation](#evaldataprep)
+    - [6.2. Syntax](#evalsyn)
+    - [6.3. Arguments](#evalargs)
+7. [Predictions{WIP}](#preds)
+8. [TFRecords{WIP}](#tfrecs)
+    - [8.1. Create TFRecords](#createtfrecs)
+        - [8.1.1. Syntax](#syntfrecs)
+        - [8.1.2. Arguments](#argstfrecs)
+    - [8.2. Train](#traintfrecs)
+    - [8.3. Evaluate](#evaltfrecs)
 9. Training Attempts
 10. Models - trained model example using faces dataset and link to the dataset
 11. Dependencies
 
 ## 1. Introduction <a name="intro"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 - This is a project created for facial recognition. 
 
@@ -53,6 +57,8 @@ A facial recognition software created using Tensorflow 2.6
 - **The model can be trained or evaluated using image datasets as they are or tfrecord datasets can be created using them. If the datasets are larger, the latter is recommended.**
 
 ## 2. Setup <a name="setup"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 - In order to run this script, an environment needs to be created and all the dependencies of this code should be installed to the created environment.
 
@@ -152,6 +158,8 @@ If you followed the above steps properly, now you're ready to run scripts.
 
 ## 3. Configurations <a name="configs"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 - All configurations can be found at `config.py`. 
 
 - Configurations are divided into *Architecture*, *Train* and *Test* for ease of use.
@@ -184,6 +192,8 @@ If you followed the above steps properly, now you're ready to run scripts.
 
 ## 4. Model Architecture <a name="modelarch"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
 Current architecture of the facial recognition model:
 
     ```
@@ -208,6 +218,8 @@ Current architecture of the facial recognition model:
 - A pre-trained [MobileNetV2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2/MobileNetV2) model is used for image feature extraction.
 
 ## 5. Train Model <a name="train"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
 
 Below is a guide to train the model from scratch using image datasets(without converting them to tfrecords. For tfrecords option, see [TFRecords] below)
 
@@ -252,14 +264,14 @@ dataset
 python train_from_images.py
     --dataset_path PATH/TO/THE/FOLDER/CONTAINING/TRAINING/DATASET
     --model_save_path PATH/TO/THE/FOLDER/MODEL/SHOULD/BE/SAVED/TO
-    -- epochs NUMBER/OF/EPOCHS/TO/TRAIN
+    --epochs NUMBER/OF/EPOCHS/TO/TRAIN
 ```
 
 ### 5.3. Arguments <a name="trainargs"></a>
 
 | Argument | Description | Notes |
 |----------|-------------|-------|
-| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section. |
+| `-p` / `--dataset_path` | Path to the dataset containing the train data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
 | `-m` / `--model_save_path` | Path of the folder to save the trained model | A model named with proper naming conventions (discussed in [Models] section) will be saved tho this location |
 | `-e` / `--epochs` | Number of epochs to train | **Not Mandatory**. If a value is passed, it will override the value in `epochs` configuration. |
 
@@ -303,4 +315,89 @@ python train_from_images.py
     tensorboard --logdir tensorboard/tensorboard_20210220_125609
     ```
 
+- After the server is started, navigate to the link displayed on the terminal and a dashboard similar to the one in image below will be rendered on your web browser.
 
+![Sample Tensorboard Dashboard](docs/tboard.png)
+<p align="center">Image courtesy: <a href="https://www.tensorflow.org/tensorboard/get_started">Get started with TensorBoard</a</p>
+
+## 6. Evaluate Model <a name="eval"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+Following is a guide to evaluate trained models.
+
+- Currently the script is enabled to evaluate **fully saved models only**. Functionality to evaluate saved weights on checkpoint files has not been implemented yet.
+
+### 6.1. Dataset Preparation <a name="evaldataprep"></a>
+
+- The evaluation dataset should conform to the dataset structure described in [Dataset Preparation](#dataprep) in the [Train Model](#train) section.
+
+### 6.2. Syntax <a name="evalsyn"></a>
+
+- `evaluate_from_images.py` is used to train facial recognition model. The syntax is as follows.
+
+```
+python evaluate_from_images.py
+    --dataset_path PATH/TO/THE/FOLDER/CONTAINING/EVALUATION/DATASET
+    --model_path PATH/TO/THE/TRAINED/MODEL/THAT/NEEDS/TO/BE/EVALUATED
+```
+
+- After the completion of evaluation, loss and accuracy will be displayed.
+
+### 6.3. Arguments <a name="evalargs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the folder containing evaluation data | This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
+| `-mp` / `--model_path` | Path to the saved model that needs to be evaluated | Should be a valid path to a Tensorflow SavedModel |
+
+## 7. Predictions - [Work In Progress] <a name="preds"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+- Taking predictions for a single image using a trained model.
+
+- Still work in progress.
+
+## 8. TFRecords - [Work In Progress] <a name="tfrecs"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+- The option to train and evaluate models using TFRecords.
+
+- Refer [this link](https://www.tensorflow.org/tutorials/load_data/tfrecord) For further details about TFRecords.
+
+- This method is recommended if the size of the train and evaluation datasets are bigger.
+
+- TFRecords files for train and evaluation sets should be created prior to train and evaluation processes.
+
+### 8.1. Create TFRecords <a name="createtfrecs"></a>
+
+- `create_tfrecords.py` is used to create TFRecords.
+
+#### 8.1.1. Syntax <a name="syntfrecs"></a>
+
+```
+python create_tfrecords.py
+    --dataset_path PATH/TO/THE/DATASET
+    --mode DATASET/TYPE
+    --output_path PATH/TO/THE/FOLDER/TO/SAVE/TFRECORDS
+```
+
+- After execution, a TFRecords file named `{mode}.tfrecords` will be saved in the folder specified by *output_path*.
+
+#### 8.1.2. Arguments <a name="argstfrecs"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--dataset_path` | Path to the folder containing train/test dataset |  This data must conform to data discussed in [Dataset Preparation](#dataprep) section |
+| `-m` / `--mode` | Type of the dataset | Enter `Train` to create train set, `Test` to create test set. Not case sensitive. Defaulted to `Train` |
+| `-o` / `--output_path` | Path to the folder where TFRecords file/s should be written into | Make sure to enter a path to a valid folder |
+
+### 8.2. Train <a name="trainfrecs"></a>
+
+- Scripts to train a model using TFRecords has not been implemented yet.
+
+### 8.3. Evaluate <a name="evaltfrecs"></a>
+
+- Scripts to evaluate a model using TFRecords has not been implemented yet.
