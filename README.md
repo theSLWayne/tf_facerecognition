@@ -40,9 +40,8 @@ A facial recognition software created using Tensorflow 2.6
         - [8.1.2. Arguments](#argstfrecs)
     - [8.2. Train](#traintfrecs)
     - [8.3. Evaluate](#evaltfrecs)
-9. Training Attempts
-10. Models - trained model example using faces dataset and link to the dataset
-11. Dependencies
+9. [Training Attempts](#trains)
+10. [Dependencies](#deps)
 
 ## 1. Introduction <a name="intro"></a>
 
@@ -401,3 +400,37 @@ python create_tfrecords.py
 ### 8.3. Evaluate <a name="evaltfrecs"></a>
 
 - Scripts to evaluate a model using TFRecords has not been implemented yet.
+
+## Training Attempts <a name="trains"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+### [2021/10/17 - Attempt 1](#attone)
+
+Dataset used: [5 Celebrity Faces Dataset](https://www.kaggle.com/dansbecker/5-celebrity-faces-dataset)
+
+Train set images: 93 (train - 75, validation - 18)
+
+No. of epochs: 16 (Training finished after validation accuracy not being improved after patience epochs)
+
+Training accuracy - Last epoch: 0.9333
+
+Validation accuracy - Last epoch: 0.6667
+
+Test set images: 25
+
+Validation accuracy: 0.8399
+
+## Dependencies <a name="deps"></a>
+
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+Below is a list of major dependencies of the project.
+
+- `tensorflow-gpu` *2.6.0*
+- `scikit-learn` *0.24.1*
+- `matplotlib` *3.3.4*
+- `pandas` *1.2.4*
+- `numpy` *1.19.5*
+- `joblib` *1.0.1*
+- `glog` *0.3.1*
