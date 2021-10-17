@@ -421,4 +421,16 @@ Test set images: 25
 
 Validation accuracy: 0.8399
 
+## Dependencies <a name="deps"></a>
 
+<p align="right"><a href="#toc">Table of contents ↑</a></p>
+
+Below is a list of major dependencies of the project.
+
+- `tensorflow-gpu` *2.6.0*
+- `scikit-learn` *0.24.1*
+- `matplotlib` *3.3.4*
+- `pandas` *1.2.4*
+- `numpy` *1.19.5*
+- `joblib` *1.0.1*
+- `glog` *0.3.1*
