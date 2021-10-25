@@ -8,6 +8,7 @@ Take prediction for a single image using a trained model.
 '''
 
 import tensorflow as tf
+import numpy as np
 
 import argparse
 import os
@@ -59,8 +60,9 @@ def load_image(image_path):
 
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
     resized_image = cv2.resize(image, (config.architecture.image_width, config.architecture.image_height), interpolation=cv2.INTER_AREA)
+    reshaped_image = resized_image.reshape(1, config.architecture.image_width, config.architecture.image_height, config.architecture.input_channels)
 
-    return resized_image
+    return reshaped_image
 
 def load_classes(classes_path):
     """
@@ -91,11 +93,10 @@ def take_prediction(model_path, image, classes):
     # Laod the model
     model = tf.keras.models.load_model(model_path)
 
-    preds = model.predict(image)
+    pred = model.predict(image)
+    pred_class = classes[np.argmax(pred)]
 
-    #TODO: Return classes instead of class number
-
-    return preds
+    return pred_class
 
 if __name__ == '__main__':
     """
