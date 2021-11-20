@@ -34,6 +34,10 @@ A facial recognition software created using Tensorflow 2.6
     - [6.2. Syntax](#evalsyn)
     - [6.3. Arguments](#evalargs)
 7. [Predictions{WIP}](#preds)
+    - [7.1. From Complete Models (SavedModel)](#predsm)
+        - [7.1.1 Syntax](#syntsm)
+        - [7.1.2. Arguments](#argsm)
+    - [7.2. From Weights (Checkpoints){WIP}](#predsw)
 8. [TFRecords{WIP}](#tfrecs)
     - [8.1. Create TFRecords](#createtfrecs)
         - [8.1.1. Syntax](#syntfrecs)
@@ -356,7 +360,32 @@ python evaluate_from_images.py
 
 - Taking predictions for a single image using a trained model.
 
-- Still work in progress.
+- After running the script, the predicted class will be displayed on the terminal.
+
+### 7.1. From Complete Models (SavedModel) <a name="predsm"></a>
+
+- `predict.py` is used to take predictions from a trained model saved as a TensorFlow SavedModel.
+
+#### 7.1.1 Syntax <a name="syntsm"></a>
+
+```
+python predict.py
+    --image_path PATH/TO/IMAGE/
+    --model_path PATH/TO/SAVED/MODEL
+    --classes_path PATH/TO/CLASSES/PICKLE/FILE
+```
+
+#### 7.1.2. Arguments <a name="argsm"></a>
+
+| Argument | Description | Notes |
+|----------|-------------|-------|
+| `-p` / `--image_path` | Path to the prediction image | Must be a valid path to an image |
+| `-mp` / `--model_path` | Path of the trained model that is used to take prediction | Must be a valid path to a TensorFlow SavedModel folder |
+| `-c` / `--classes_path` | Path to the pickle file containing class names | Must be a valid path to a pickle file(.pkl) |
+
+### 7.2. From Weights (Checkpoints) - [Work In Progress] <a name="predsw"></a>
+
+- Work in progress.
 
 ## 8. TFRecords - [Work In Progress] <a name="tfrecs"></a>
 
